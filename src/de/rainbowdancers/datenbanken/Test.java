@@ -17,6 +17,7 @@ public class Test {
       String connectionString = "jdbc:oracle:thin:@dbl43.beuth-hochschule.de:1521:oracle";
       String user = "KLATT";
       String password = "Student";
+      s.printlnSeparation();
       DatabaseOperationsOracle dbo = new DatabaseOperationsOracle(connectionString, user, password);
       IOStreamTableCSV io = new IOStreamTableCSV(";");
       TranslateTableToSQL CSVToSQL = new TranslateTableToSQL();
@@ -26,35 +27,38 @@ public class Test {
       Table onlineShops = new Table("OnlineShops", new String [] { "ShopID", "Shop" });
       Table outfits = new Table("Outfits", new String [] { "OutfitID", "Actor", "Category", "Subcategory", "Brand", "Color" });
 
-      Table test = new Table("Test", new String [] { "ID", "VALUE" });
-
-      s.printlnSeparation();
       dbo.printFields();
       s.printlnSeparation();
       dbo.connect();
-
+      s.println();
       try {
          io.readCSVIntoTable("data/Brands.csv", brands);
          io.readCSVIntoTable("data/Clothing.csv", clothing);
          io.readCSVIntoTable("data/Colors.csv", colors);
          io.readCSVIntoTable("data/OnlineShops.csv", onlineShops);
          io.readCSVIntoTable("data/Outfits.csv", outfits);
-         io.readCSVIntoTable("data/test.csv", test);
-         s.println("Tabellen eingelesen.");
-
-         dbo.insertTransaction(test, "int", "String");
-         // dbo.setPreparedStatement(test);
-         // PreparedStatement a = dbo.getPreparedStatement();
-         // s.println(test.toString());
-         // a.setInt(1, Integer.parseInt(test.getRow(0)[0]));
-         // a.setString(2, "TEST");
-         // a.execute();
-
+         s.println("Tabelle Brands eingelesen.");
+         s.println("Tabelle Clothing eingelesen.");
+         s.println("Tabelle Colors eingelesen.");
+         s.println("Tabelle OnlineShops eingelesen.");
+         s.println("Tabelle Outfits eingelesen.");
+         s.println();
+         dbo.insertTransaction(brands, "int", "String");
+         dbo.insertTransaction(clothing, "int", "String");
+         dbo.insertTransaction(colors, "int", "String");
+         dbo.insertTransaction(onlineShops, "int", "String");
+         dbo.insertTransaction(outfits, "int", "String", "String", "String", "String", "String");
+         s.println("Inserted Brands succesful.");
+         s.println("Inserted Clothing succesful.");
+         s.println("Inserted Colors succesful.");
+         s.println("Inserted OnlineShops succesful.");
+         s.println("Inserted Outfits succesful.");
+         s.println();
       } catch (IOException | NotEnoughColumnsException | SQLException | DifferentNumberOfColumnsException e) {
          e.printStackTrace();
       }
-
       dbo.disconnect();
+      s.printlnSeparation();
    }
    // Ggf. Tabelle mit SQL in DB erzeugen
 
