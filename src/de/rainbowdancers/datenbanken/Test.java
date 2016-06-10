@@ -1,8 +1,11 @@
 package de.rainbowdancers.datenbanken;
 
 import java.io.IOException;
+import de.rainbowdancers.exceptions.NotEnoughColumnsException;
 import de.tobi_wan.support.StandardOutput;
 import de.tobi_wan.support.Table;
+
+
 
 public class Test {
 
@@ -29,8 +32,12 @@ public class Test {
          io.readCSVIntoTable("data/Colors.csv", colors);
          io.readCSVIntoTable("data/OnlineShops.csv", onlineShops);
          io.readCSVIntoTable("data/Outfit.csv", outfits);
+
+         io.readCSVIntoTable("data/Outfit.csv", brands);
          s.println("Tabellen eingelesen");
       } catch (IOException e) {
+         e.printStackTrace();
+      } catch (NotEnoughColumnsException e) {
          e.printStackTrace();
       }
       // Tabellen in SQL uebersetzen

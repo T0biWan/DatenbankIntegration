@@ -2,6 +2,8 @@ package de.tobi_wan.support;
 
 import java.util.ArrayList;
 
+
+
 public class Table {
    // Attribute
    StandardOutput              s    = StandardOutput.defaultSupportMethods();
@@ -45,6 +47,10 @@ public class Table {
 
    public String [] getRow(int row) {
       return data.get(row);
+   }
+
+   public void deleteRow(int row) {
+      data.remove(getRow(row));
    }
 
    public String toString() {
