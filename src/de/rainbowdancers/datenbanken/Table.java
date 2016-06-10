@@ -1,7 +1,7 @@
 package de.rainbowdancers.datenbanken;
 
 import java.util.ArrayList;
-import tobi_wan.support.StandardOutput;
+import de.tobi_wan.support.StandardOutput;
 
 
 
