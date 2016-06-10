@@ -62,6 +62,10 @@ public class Table { // Attribute
       data.remove(getRow(row));
    }
 
+   public ArrayList<String []> getAllRows() {
+      return data;
+   }
+
    public String toString() {
       String string = "Table:\nName:\t\t" + getTableName() + "\nColumns:\t" + getNumberOfColumns() + "\nRows:\t\t" + getNumberOfRows() + "\n";
       string += s.arrayToString(columnNames) + "\n";

@@ -6,7 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import de.rainbowdancers.exceptions.DifferentNumberOfColumnsException;
 import de.tobi_wan.support.StandardOutput;
+import de.tobi_wan.support.Table;
 
 
 
@@ -66,6 +68,14 @@ public class DatabaseOperationsOracle {
       this.connectionString = connectionString;
    }
 
+   public PreparedStatement getPreparedStatement() {
+      return preparedStatement;
+   }
+
+   public void setPreparedStatement(Table table) throws SQLException {
+      this.preparedStatement = makePreparedStatement(makePreparedStatementInsertString(table));
+   }
+
    // Methoden
    public void printFields() {
       standardOutput.println("Daten:" + "\nUser:\t\t\t" + getUser() + "\nPassword:\t\t" + getPassword() + "\nConnectionString:\t" + getConnectionString());
@@ -97,16 +107,16 @@ public class DatabaseOperationsOracle {
       return true;
    }
 
-   public String makeInsertPreparedStatement(String tableName, String [] columnNames) {
-      String returnString = "INSERT INTO " + tableName + " (";
-      for (int i = 0; i < columnNames.length; i++) {
-         returnString += columnNames[i];
-         if (i < columnNames.length - 1) returnString += ", ";
+   public String makePreparedStatementInsertString(Table table) {
+      String returnString = "INSERT INTO " + table.getTableName() + " (";
+      for (int i = 0; i < table.getNumberOfColumns(); i++) {
+         returnString += table.getColumnNames()[i];
+         if (i < table.getNumberOfColumns() - 1) returnString += ", ";
       }
       returnString += ") VALUES (";
-      for (int i = 0; i < columnNames.length; i++) {
+      for (int i = 0; i < table.getNumberOfColumns(); i++) {
          returnString += "?";
-         if (i < columnNames.length - 1) returnString += ", ";
+         if (i < table.getNumberOfColumns() - 1) returnString += ", ";
       }
       returnString += ");";
       return returnString;
@@ -114,5 +124,54 @@ public class DatabaseOperationsOracle {
 
    public PreparedStatement makePreparedStatement(String preparedStatement) throws SQLException {
       return connection.prepareStatement(preparedStatement);
+   }
+
+   public void insertOneTablerowIntoPreparedStatement(String [] tablerow, String... datatypesOfColumns) throws NumberFormatException, SQLException {
+      for (int i = 0; i < tablerow.length; i++) {
+         switch (datatypesOfColumns[i]) {
+            case "int":
+               getPreparedStatement().setInt(i + 1, Integer.parseInt(tablerow[i]));
+               standardOutput.println("setInt(" + tablerow[i] + ");");
+               break;
+            case "String":
+               getPreparedStatement().setString(i + 1, tablerow[i]);
+               standardOutput.println("setString(" + tablerow[i] + ");");
+               break;
+         }
+      }
+   }
+
+   public void insertTransaction(Table table, String... datatypesOfColumns) throws DifferentNumberOfColumnsException, SQLException {
+      if (table.getNumberOfColumns() != datatypesOfColumns.length) throw new DifferentNumberOfColumnsException();
+      setPreparedStatement(table);
+      insertOneTablerowIntoPreparedStatement(table.getRow(0), datatypesOfColumns);
+      // for(each Tablerow) insertOneTableRowInPreeparedStatement
+      // preparedStatement.executeUpdate();
+      // Rollback?
+   }
+
+   public String insertRowIntoPreparedStatement(String [] row, String... datatypesOfColumns) throws DifferentNumberOfColumnsException {
+      if (row.length != datatypesOfColumns.length) throw new DifferentNumberOfColumnsException();
+      String s = "";
+      for (int i = 0; i < row.length; i++) {
+         switch (datatypesOfColumns[i]) {
+            case "int":
+               s += "setInt(";
+            case "String":
+               s += "setString(\"";
+         }
+         s += row[i] + "); ";
+      }
+      s += "executeUpdate();\n";
+      return s;
+   }
+
+   public String insertAllRowsIntoPreparedStatement(Table table, String... datatypesOfColumns) throws DifferentNumberOfColumnsException {
+      String s = "";
+      if (table.getNumberOfColumns() != datatypesOfColumns.length) throw new DifferentNumberOfColumnsException();
+      for (String [] row : table.getAllRows()) {
+         s += insertRowIntoPreparedStatement(row, datatypesOfColumns);
+      }
+      return s;
    }
 }

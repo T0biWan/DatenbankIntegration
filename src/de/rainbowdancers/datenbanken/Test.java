@@ -1,6 +1,8 @@
 package de.rainbowdancers.datenbanken;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import de.rainbowdancers.exceptions.DifferentNumberOfColumnsException;
 import de.rainbowdancers.exceptions.NotEnoughColumnsException;
 import de.tobi_wan.support.StandardOutput;
 import de.tobi_wan.support.Table;
@@ -27,7 +29,7 @@ public class Test {
       s.printlnSeparation();
       dbo.printFields();
       s.printlnSeparation();
-      // dbo.connect();
+      dbo.connect();
       try {
          io.readCSVIntoTable("data/Brands.csv", brands);
          io.readCSVIntoTable("data/Clothing.csv", clothing);
@@ -35,17 +37,22 @@ public class Test {
          io.readCSVIntoTable("data/OnlineShops.csv", onlineShops);
          io.readCSVIntoTable("data/Outfits.csv", outfits);
          s.println("Tabellen eingelesen.");
-         s.println(brands.toString());
-         s.println(dbo.makeInsertPreparedStatement(brands.getTableName(), brands.getColumnNames()));
+         dbo.insertTransaction(colors, "int", "String");
       } catch (IOException e) {
          e.printStackTrace();
       } catch (NotEnoughColumnsException e) {
          e.printStackTrace();
+      } catch (NumberFormatException e) {
+         e.printStackTrace();
+      } catch (DifferentNumberOfColumnsException e) {
+         e.printStackTrace();
+      } catch (SQLException e) {
+         e.printStackTrace();
       }
-      // Tabellen in SQL uebersetzen
-      // Ggf. Tabelle mit SQL in DB erzeugen
-      // SQL Transaktionen anweisen
-      // dbo.disconnect();
+      dbo.disconnect();
    }
+   // Tabellen in SQL uebersetzen
+   // Ggf. Tabelle mit SQL in DB erzeugen
+   // SQL Transaktionen anweisen
 
 }
