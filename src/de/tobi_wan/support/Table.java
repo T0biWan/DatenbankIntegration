@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 
 
-public class Table {
-   // Attribute
+public class Table { // Attribute
    StandardOutput              s    = StandardOutput.defaultSupportMethods();
    private String              tableName;
    private int                 numberOfColumns;
+   private String []           columnNames;
    private String []           tableRows;
    public ArrayList<String []> data = new ArrayList<>();
 
@@ -17,26 +17,35 @@ public class Table {
       return tableName;
    }
 
-   public int getNumberOfColumns() {
-      return numberOfColumns;
-   }
-
-   public int getNumberOfRows() {
-      return data.size();
-   }
-
    public void setTableName(String tableName) {
       this.tableName = tableName;
+   }
+
+   public int getNumberOfColumns() {
+      return numberOfColumns;
    }
 
    public void setNumberOfColumns(int numberOfColumns) {
       this.numberOfColumns = numberOfColumns;
    }
 
+   public int getNumberOfRows() {
+      return data.size();
+   }
+
+   public String [] getColumnNames() {
+      return columnNames;
+   }
+
+   public void setColumnNames(String [] columnNames) {
+      this.columnNames = columnNames;
+   }
+
    // Konstruktor
-   public Table(String tableName, int numberOfColumns) {
+   public Table(String tableName, String [] columnNames) {
       setTableName(tableName);
-      setNumberOfColumns(numberOfColumns);
+      setColumnNames(columnNames);
+      setNumberOfColumns(columnNames.length);
       tableRows = new String [getNumberOfColumns()];
    }
 
@@ -55,6 +64,7 @@ public class Table {
 
    public String toString() {
       String string = "Table:\nName:\t\t" + getTableName() + "\nColumns:\t" + getNumberOfColumns() + "\nRows:\t\t" + getNumberOfRows() + "\n";
+      string += s.arrayToString(columnNames) + "\n";
       for (int i = 0; i < getNumberOfRows(); i++)
          string += s.arrayToString(getRow(i)) + "\n";
       return string;

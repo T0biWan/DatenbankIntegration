@@ -2,6 +2,7 @@ package de.rainbowdancers.datenbanken;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -11,14 +12,15 @@ import de.tobi_wan.support.StandardOutput;
 
 public class DatabaseOperationsOracle {
    // Attribute
-   StandardOutput     standardOutput = StandardOutput.defaultSupportMethods();
-   private String     driver         = "oracle.jdbc.driver.OracleDriver";
-   private String     user;
-   private String     password;
-   private String     connectionString;
-   private Connection connection;
-   private Statement  statement;
-   private ResultSet  resultSet;
+   StandardOutput            standardOutput = StandardOutput.defaultSupportMethods();
+   private String            driver         = "oracle.jdbc.driver.OracleDriver";
+   private String            user;
+   private String            password;
+   private String            connectionString;
+   private Connection        connection;
+   private Statement         statement;
+   private ResultSet         resultSet;
+   private PreparedStatement preparedStatement;
 
    // Konstruktor
    public DatabaseOperationsOracle(String connectionString, String user, String password) {
@@ -26,6 +28,7 @@ public class DatabaseOperationsOracle {
       this.connection = null;
       this.statement = null;
       this.resultSet = null;
+      this.preparedStatement = null;
       setConnectionString(connectionString);
       setUser(user);
       setPassword(password);
@@ -65,7 +68,7 @@ public class DatabaseOperationsOracle {
 
    // Methoden
    public void printFields() {
-      standardOutput.println("\nDaten:" + "\nUser:\t\t\t" + getUser() + "\nPassword:\t\t" + getPassword() + "\nConnectionString:\t" + getConnectionString());
+      standardOutput.println("Daten:" + "\nUser:\t\t\t" + getUser() + "\nPassword:\t\t" + getPassword() + "\nConnectionString:\t" + getConnectionString());
    }
 
    public boolean connect() {
@@ -92,5 +95,24 @@ public class DatabaseOperationsOracle {
          return false;
       }
       return true;
+   }
+
+   public String makeInsertPreparedStatement(String tableName, String [] columnNames) {
+      String returnString = "INSERT INTO " + tableName + " (";
+      for (int i = 0; i < columnNames.length; i++) {
+         returnString += columnNames[i];
+         if (i < columnNames.length - 1) returnString += ", ";
+      }
+      returnString += ") VALUES (";
+      for (int i = 0; i < columnNames.length; i++) {
+         returnString += "?";
+         if (i < columnNames.length - 1) returnString += ", ";
+      }
+      returnString += ");";
+      return returnString;
+   }
+
+   public PreparedStatement makePreparedStatement(String preparedStatement) throws SQLException {
+      return connection.prepareStatement(preparedStatement);
    }
 }
