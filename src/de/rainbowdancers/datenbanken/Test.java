@@ -26,33 +26,36 @@ public class Test {
       Table onlineShops = new Table("OnlineShops", new String [] { "ShopID", "Shop" });
       Table outfits = new Table("Outfits", new String [] { "OutfitID", "Actor", "Category", "Subcategory", "Brand", "Color" });
 
+      Table test = new Table("Test", new String [] { "ID", "VALUE" });
+
       s.printlnSeparation();
       dbo.printFields();
       s.printlnSeparation();
       dbo.connect();
+
       try {
          io.readCSVIntoTable("data/Brands.csv", brands);
          io.readCSVIntoTable("data/Clothing.csv", clothing);
          io.readCSVIntoTable("data/Colors.csv", colors);
          io.readCSVIntoTable("data/OnlineShops.csv", onlineShops);
          io.readCSVIntoTable("data/Outfits.csv", outfits);
+         io.readCSVIntoTable("data/test.csv", test);
          s.println("Tabellen eingelesen.");
-         dbo.insertTransaction(colors, "int", "String");
-      } catch (IOException e) {
-         e.printStackTrace();
-      } catch (NotEnoughColumnsException e) {
-         e.printStackTrace();
-      } catch (NumberFormatException e) {
-         e.printStackTrace();
-      } catch (DifferentNumberOfColumnsException e) {
-         e.printStackTrace();
-      } catch (SQLException e) {
+
+         dbo.insertTransaction(test, "int", "String");
+         // dbo.setPreparedStatement(test);
+         // PreparedStatement a = dbo.getPreparedStatement();
+         // s.println(test.toString());
+         // a.setInt(1, Integer.parseInt(test.getRow(0)[0]));
+         // a.setString(2, "TEST");
+         // a.execute();
+
+      } catch (IOException | NotEnoughColumnsException | SQLException | DifferentNumberOfColumnsException e) {
          e.printStackTrace();
       }
+
       dbo.disconnect();
    }
-   // Tabellen in SQL uebersetzen
    // Ggf. Tabelle mit SQL in DB erzeugen
-   // SQL Transaktionen anweisen
 
 }
