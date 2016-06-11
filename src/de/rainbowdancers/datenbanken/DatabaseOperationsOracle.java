@@ -147,7 +147,6 @@ public class DatabaseOperationsOracle {
          getPreparedStatement().execute();
       }
       getPreparedStatement().close();
-      // Rollback?
    }
 
 }

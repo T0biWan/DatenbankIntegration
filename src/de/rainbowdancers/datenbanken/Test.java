@@ -39,7 +39,6 @@ public class Test {
       dbo.disconnect();
       s.printlnSeparation();
    }
-   // Ggf. Tabelle mit SQL in DB erzeugen
 
    private static void initialiseAttributes() {
       s = new StandardOutput("*", 80);
