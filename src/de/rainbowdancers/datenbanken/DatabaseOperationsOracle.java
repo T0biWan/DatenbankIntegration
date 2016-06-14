@@ -36,7 +36,6 @@ public class DatabaseOperationsOracle {
       setPassword(password);
       try {
          Class.forName(driver);
-         standardOutput.println("Oracle JDBC Driver Registered.");
       } catch (ClassNotFoundException e) {
          System.out.println("Oracle JDBC Driver not found.");
          e.printStackTrace();
@@ -78,7 +77,7 @@ public class DatabaseOperationsOracle {
 
    // Methoden
    public void printFields() {
-      standardOutput.println("Daten:" + "\nUser:\t\t\t" + getUser() + "\nPassword:\t\t" + getPassword() + "\nConnectionString:\t" + getConnectionString());
+      standardOutput.println("User:\t\t\t" + getUser() + "\nPassword:\t\t" + getPassword() + "\nConnectionString:\t" + getConnectionString());
    }
 
    public boolean connect() {

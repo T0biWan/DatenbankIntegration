@@ -9,8 +9,6 @@ import tobi_wan.support.StandardOutput;
 
 
 
-// Ausgabe formatieren
-
 public class Main {
    // Attribute
    static StandardOutput           s;
@@ -28,24 +26,16 @@ public class Main {
    // Methoden
    public static void main(String [] args) {
       initialiseAttributes();
-      s.printlnSeparation();
       dbo.printFields();
       s.printlnSeparation();
       dbo.connect();
       s.println();
 
-      // try {
-      // dbo.createTableTransaction(new Table("Test2", "ID", "Value"), 1, "int",
-      // "String");
-      // } catch (SQLException e) {
-      // e.printStackTrace();
-      // }
-      // CSVToOracleInsertTransaction(brands, "int", "String");
-      // CSVToOracleInsertTransaction(clothing, "int", "String");
-      // CSVToOracleInsertTransaction(colors, "int", "String");
-      // CSVToOracleInsertTransaction(onlineShops, "int", "String");
-      // CSVToOracleInsertTransaction(outfits, "int", "String", "String",
-      // "String", "String", "String");"
+      csvToOracleTable(brands, "data/Brands.csv", 1, "int", "String");
+      csvToOracleTable(clothing, "data/Clothing.csv", 1, "int", "String");
+      csvToOracleTable(colors, "data/Colors.csv", 1, "int", "String");
+      csvToOracleTable(onlineShops, "data/OnlineShops.csv", 1, "int", "String");
+      csvToOracleTable(outfits, "data/Outfits.csv", 1, "int", "String", "String", "String", "String", "String");
 
       dbo.disconnect();
       s.printlnSeparation();
@@ -66,18 +56,27 @@ public class Main {
       outfits = new Table("Outfits", new String [] { "OutfitID", "Actor", "Category", "Subcategory", "Brand", "Color" });
    }
 
-   private static void CSVToOracleInsertTransaction(Table table, String... datatypesOfColumns) {
+   private static void csvToOracleTable(Table table, String path, int columnNumberOfPrimaryKey, String... datatypesOfColumns) {
       try {
-         io.readCSVIntoTable("data/" + table.getTableName() + ".csv", table);
-         s.println("Tabelle " + table.getTableName() + " eingelesen.");
+         s.print("Read input:\t");
+         io.readCSVIntoTable(path, table);
+         s.println("Succesful");
       } catch (IOException e) {
          e.printStackTrace();
       } catch (NotEnoughColumnsException e) {
          e.printStackTrace();
       }
       try {
+         s.print("Create table:\t");
+         dbo.createTableTransaction(table, columnNumberOfPrimaryKey, datatypesOfColumns);
+         s.println("Succesful");
+      } catch (SQLException e) {
+         e.printStackTrace();
+      }
+      try {
+         s.print("Insert data:\t");
          dbo.insertTransaction(table, datatypesOfColumns);
-         s.println("Inserted" + table.getTableName() + " succesful.");
+         s.println("Succesful\n");
       } catch (DifferentNumberOfColumnsException e) {
          e.printStackTrace();
       } catch (SQLException e) {
