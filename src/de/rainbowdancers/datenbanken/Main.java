@@ -9,6 +9,9 @@ import tobi_wan.support.StandardOutput;
 
 
 
+// Create Table
+// Ausgabe formatieren
+
 public class Main {
    // Attribute
    static StandardOutput           s;
@@ -68,7 +71,7 @@ public class Main {
       }
       try {
          dbo.insertTransaction(table, datatypesOfColumns);
-         s.println("Inserted Brands succesful.");
+         s.println("Inserted" + table.getTableName() + " succesful.");
       } catch (DifferentNumberOfColumnsException e) {
          e.printStackTrace();
       } catch (SQLException e) {
