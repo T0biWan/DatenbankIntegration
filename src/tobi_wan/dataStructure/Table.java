@@ -40,7 +40,7 @@ public class Table {
    private ArrayList<String []> data = new ArrayList<>();
 
    // Konstruktor
-   public Table(String tableName, String [] columnNames) {
+   public Table(String tableName, String... columnNames) {
       setTableName(tableName);
       setColumnNames(columnNames);
       setNumberOfColumns();
