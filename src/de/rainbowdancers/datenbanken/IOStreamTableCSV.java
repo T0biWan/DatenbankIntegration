@@ -5,8 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import de.rainbowdancers.exceptions.NotEnoughColumnsException;
-import de.tobi_wan.support.IOStreamCSV;
-import de.tobi_wan.support.Table;
+import tobi_wan.IO.IOStreamCSV;
+import tobi_wan.dataStructure.Table;
 
 
 

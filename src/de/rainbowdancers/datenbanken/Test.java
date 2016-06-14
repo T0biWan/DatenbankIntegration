@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import de.rainbowdancers.exceptions.DifferentNumberOfColumnsException;
 import de.rainbowdancers.exceptions.NotEnoughColumnsException;
-import de.tobi_wan.support.StandardOutput;
-import de.tobi_wan.support.Table;
+import tobi_wan.dataStructure.Table;
+import tobi_wan.support.StandardOutput;
 
 
 
@@ -25,8 +25,8 @@ public class Test {
 
    // Methoden
    public static void main(String [] args) {
-      s.printlnSeparation();
       initialiseAttributes();
+      s.printlnSeparation();
       dbo.printFields();
       s.printlnSeparation();
       dbo.connect();

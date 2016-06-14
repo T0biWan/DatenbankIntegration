@@ -1,4 +1,4 @@
-package de.tobi_wan.support;
+package tobi_wan.IO;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

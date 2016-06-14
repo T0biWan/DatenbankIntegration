@@ -7,8 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import de.rainbowdancers.exceptions.DifferentNumberOfColumnsException;
-import de.tobi_wan.support.StandardOutput;
-import de.tobi_wan.support.Table;
+import tobi_wan.dataStructure.Table;
+import tobi_wan.support.StandardOutput;
 
 
 
