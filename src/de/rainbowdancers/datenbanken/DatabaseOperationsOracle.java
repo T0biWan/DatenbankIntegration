@@ -72,8 +72,8 @@ public class DatabaseOperationsOracle {
       return preparedStatement;
    }
 
-   public void setPreparedStatement(Table table) throws SQLException {
-      this.preparedStatement = makePreparedStatement(makePreparedStatementInsertString(table));
+   public void setPreparedStatement(String preparedStatementString) throws SQLException {
+      this.preparedStatement = makePreparedStatement(preparedStatementString);
    }
 
    // Methoden
@@ -107,7 +107,26 @@ public class DatabaseOperationsOracle {
       return true;
    }
 
-   public String makePreparedStatementInsertString(Table table) {
+   public String makeCreateTableString(Table table, int columnNumberOfPrimaryKey, String... datatypesOfColumns) {
+      String returnString = "CREATE TABLE " + table.getTableName() + "(";
+      for (int i = 0; i < table.getNumberOfColumns(); i++) {
+         returnString += table.getColumnNames()[i] + " ";
+         switch (datatypesOfColumns[i]) {
+            case "int":
+               returnString += "NUMBER(38,0)";
+               break;
+            case "String":
+               returnString += "VARCHAR2(128 BYTE)";
+               break;
+         }
+         if (i + 1 == columnNumberOfPrimaryKey) returnString += " NOT NULL PRIMARY KEY ";
+         if (i < table.getNumberOfColumns() - 1) returnString += ", ";
+      }
+      returnString += ")";
+      return returnString;
+   }
+
+   public String makeInsertIntoString(Table table) {
       String returnString = "INSERT INTO " + table.getTableName() + " (";
       for (int i = 0; i < table.getNumberOfColumns(); i++) {
          returnString += table.getColumnNames()[i];
@@ -126,6 +145,12 @@ public class DatabaseOperationsOracle {
       return connection.prepareStatement(preparedStatement);
    }
 
+   public void createTableTransaction(Table table, int columnNumberOfPrimaryKey, String... datatypesOfColumns) throws SQLException {
+      setPreparedStatement(makeCreateTableString(table, columnNumberOfPrimaryKey, datatypesOfColumns));
+      getPreparedStatement().execute();
+      getPreparedStatement().close();
+   }
+
    public void insertOneTablerowIntoPreparedStatement(String [] tablerow, String... datatypesOfColumns) throws NumberFormatException, SQLException {
       for (int i = 0; i < tablerow.length; i++) {
          switch (datatypesOfColumns[i]) {
@@ -141,7 +166,7 @@ public class DatabaseOperationsOracle {
 
    public void insertTransaction(Table table, String... datatypesOfColumns) throws DifferentNumberOfColumnsException, SQLException {
       if (table.getNumberOfColumns() != datatypesOfColumns.length) throw new DifferentNumberOfColumnsException();
-      setPreparedStatement(table);
+      setPreparedStatement(makeInsertIntoString(table));
       for (String [] row : table.getAllRows()) {
          insertOneTablerowIntoPreparedStatement(row, datatypesOfColumns);
          getPreparedStatement().execute();

@@ -9,7 +9,6 @@ import tobi_wan.support.StandardOutput;
 
 
 
-// Create Table
 // Ausgabe formatieren
 
 public class Main {
@@ -35,11 +34,18 @@ public class Main {
       dbo.connect();
       s.println();
 
+      // try {
+      // dbo.createTableTransaction(new Table("Test2", "ID", "Value"), 1, "int",
+      // "String");
+      // } catch (SQLException e) {
+      // e.printStackTrace();
+      // }
       // CSVToOracleInsertTransaction(brands, "int", "String");
-      CSVToOracleInsertTransaction(clothing, "int", "String");
-      CSVToOracleInsertTransaction(colors, "int", "String");
-      CSVToOracleInsertTransaction(onlineShops, "int", "String");
-      CSVToOracleInsertTransaction(outfits, "int", "String", "String", "String", "String", "String");
+      // CSVToOracleInsertTransaction(clothing, "int", "String");
+      // CSVToOracleInsertTransaction(colors, "int", "String");
+      // CSVToOracleInsertTransaction(onlineShops, "int", "String");
+      // CSVToOracleInsertTransaction(outfits, "int", "String", "String",
+      // "String", "String", "String");"
 
       dbo.disconnect();
       s.printlnSeparation();
