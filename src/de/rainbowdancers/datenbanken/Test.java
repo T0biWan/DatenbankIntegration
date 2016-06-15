@@ -19,6 +19,7 @@ public class Test {
       s.println(table.toString());
       s.println();
       s.println(dboo.makeCreateTableString(table));
+
    }
 
    private static void initialiseAttributes() {

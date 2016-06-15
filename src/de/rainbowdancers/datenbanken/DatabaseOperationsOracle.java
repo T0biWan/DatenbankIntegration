@@ -116,7 +116,7 @@ public class DatabaseOperationsOracle {
          else if (table.getDatatypesOfColumns()[i] == "String") returnString += "VARCHAR2(128 BYTE)";
          if (table.getColumnOfPrimaryKey() == i) returnString += " NOT NULL PRIMARY KEY";
          for (int index : table.getColumnsOfForeignKeys()) {
-            if (index == i) returnString += " FOREING KEY REFERENCES " + table.getForeignKeyReferences()[0];
+            if (index == i) returnString += " FOREING KEY REFERENCES " + table.getForeignKeys().get(i);
          }
          if (i < table.getNumberOfColumns() - 1) returnString += ", ";
       }

@@ -60,9 +60,15 @@ public class DatabaseTable extends Table {
       this.foreignKeyReferences = foreignKeyReferences;
    }
 
+   public HashMap<Integer, String> getForeignKeys() {
+      return foreignKeys;
+   }
+
    public void setForeignKeys() {
-      for (int index : columnsOfForeignKeys)
-         foreignKeys.put(getColumnsOfForeignKeys()[index], getForeignKeyReferences()[index]);
+      foreignKeys = new HashMap<>();
+      for (int i = 0; i < columnsOfForeignKeys.length; i++) {
+         foreignKeys.put(getColumnsOfForeignKeys()[i], getForeignKeyReferences()[i]);
+      }
    }
 
    // Methoden
