@@ -34,10 +34,10 @@ public class Main {
       s.println();
 
       csvToOracleTable(brands, "data/Brands.csv");
-      csvToOracleTable(clothing, "data/Clothing.csv");
-      csvToOracleTable(colors, "data/Colors.csv");
-      csvToOracleTable(onlineShops, "data/OnlineShops.csv");
-      csvToOracleTable(outfits, "data/Outfits.csv");
+      // csvToOracleTable(clothing, "data/Clothing.csv");
+      // csvToOracleTable(colors, "data/Colors.csv");
+      // csvToOracleTable(onlineShops, "data/OnlineShops.csv");
+      // csvToOracleTable(outfits, "data/Outfits.csv");
 
       dbo.disconnect();
       s.printlnSeparation();
@@ -90,8 +90,6 @@ public class Main {
          s.print("Insert data:\t");
          dbo.insertTransaction(table);
          s.println("Succesful\n");
-      } catch (DifferentAmountOfColumnsException e) {
-         e.printStackTrace();
       } catch (SQLException e) {
          e.printStackTrace();
       }

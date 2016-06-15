@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import de.rainbowdancers.exceptions.DifferentAmountOfColumnsException;
 import tobi_wan.dataStructure.DatabaseTable;
 import tobi_wan.support.StandardOutput;
 
@@ -148,16 +147,54 @@ public class DatabaseOperationsOracle {
       getPreparedStatement().close();
    }
 
-   public void insertTransaction(DatabaseTable table) throws DifferentAmountOfColumnsException, SQLException {
+   public void insertTransaction(DatabaseTable table) throws SQLException {
       setPreparedStatement(makeInsertIntoString(table));
+      // for (int row = 0; row < table.getNumberOfRows(); row++) {
+      // for (int column = 0; column < table.getNumberOfColumns(); column++) {
+      // int sqlColumn = column + 1;
+      // if (table.getDatatypesOfColumns()[column] == "int") {
+      // getPreparedStatement().setInt(1, 1);
+      // // standardOutput.println("Row: " + row + "\tColumn: " +
+      // // sqlColumn);
+      // getPreparedStatement().execute();
+      // } else if (table.getDatatypesOfColumns()[column] == "String") {
+      // getPreparedStatement().setString(2, "Test");
+      // // standardOutput.println("Row: " + row + "\tColumn: " +
+      // // sqlColumn);
+      // getPreparedStatement().execute();
+      // }
+      // // getPreparedStatement().execute();
+      // }
+      // }
+
+      // for (int row = 0; row < table.getNumberOfRows(); row++) {
+      // getPreparedStatement().setInt(1,
+      // Integer.parseInt(table.getRow(row)[0]));
+      // getPreparedStatement().setString(2, table.getRow(row)[1]);
+      // getPreparedStatement().execute();
+      // }
+
       for (int row = 0; row < table.getNumberOfRows(); row++) {
          for (int column = 0; column < table.getNumberOfColumns(); column++) {
-            if (table.getDatatypesOfColumns()[column] == "int")
-               getPreparedStatement().setInt(column + 1, Integer.parseInt(table.getRow(row)[column]));
-            else if (table.getDatatypesOfColumns()[column] == "String") getPreparedStatement().setString(column + 1, table.getRow(row)[column]);
-            getPreparedStatement().execute();
+            int sqlColumn = column + 1;
+            if (table.getDatatypesOfColumns()[column] == "int") {
+               getPreparedStatement().setInt(sqlColumn, Integer.parseInt(table.getRow(row)[column]));
+            } else if (table.getDatatypesOfColumns()[column] == "String") {
+               getPreparedStatement().setString(sqlColumn, table.getRow(row)[column]);
+            }
          }
+         getPreparedStatement().execute();
       }
+
+      // int row = 0;
+      // int column = 0;
+      // int sqlColumn = column + 1;
+      // getPreparedStatement().setInt(sqlColumn,
+      // Integer.parseInt(table.getRow(row)[column]));
+      // getPreparedStatement().setString(column + 2,
+      // table.getRow(row)[column]);
+      // getPreparedStatement().execute();
+
       getPreparedStatement().close();
    }
 

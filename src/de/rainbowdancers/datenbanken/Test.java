@@ -1,7 +1,6 @@
 package de.rainbowdancers.datenbanken;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import de.rainbowdancers.exceptions.DifferentAmountOfColumnsException;
 import de.rainbowdancers.exceptions.NoValidNumberForPrimaryKeyException;
 import de.rainbowdancers.exceptions.NotEnoughColumnsException;
@@ -21,13 +20,7 @@ public class Test {
    // Methoden
    public static void main(String [] args) {
       initialiseAttributes();
-      try {
-         dboo.insertTransaction(table);
-      } catch (DifferentAmountOfColumnsException e) {
-         e.printStackTrace();
-      } catch (SQLException e) {
-         e.printStackTrace();
-      }
+      s.print(dboo.makeInsertIntoString(table));
 
    }
 
