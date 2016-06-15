@@ -32,19 +32,19 @@ import tobi_wan.support.StandardOutput;
 
 public class Table {
    // Attribute
-   StandardOutput               s    = StandardOutput.defaultSupportMethods();
+   StandardOutput               s         = StandardOutput.defaultSupportMethods();
    private String               tableName;
    private int                  numberOfColumns;
    private String []            columnNames;
-   private String []            tableRows;
-   private ArrayList<String []> data = new ArrayList<>();
+   private String []            tableRow;
+   private ArrayList<String []> tableRows = new ArrayList<>();
 
    // Konstruktor
    public Table(String tableName, String... columnNames) {
       setTableName(tableName);
       setColumnNames(columnNames);
       setNumberOfColumns();
-      tableRows = new String [getNumberOfColumns()];
+      tableRow = new String [getNumberOfColumns()];
    } // Table
 
    // Getter & Setter
@@ -65,7 +65,7 @@ public class Table {
    } // setNumberOfColumns
 
    public int getNumberOfRows() {
-      return data.size();
+      return tableRows.size();
    } // getNumberOfRows
 
    public String [] getColumnNames() {
@@ -74,28 +74,27 @@ public class Table {
 
    public void setColumnNames(String... columnNames) {
       this.columnNames = columnNames;
-      setNumberOfColumns();
    } // setColumnNames
 
    // Methoden
    public void addRow(String [] tableRow) {
-      data.add(tableRow);
+      tableRows.add(tableRow);
    } // addRow
 
    public String [] getRow(int row) {
-      return data.get(row);
+      return tableRows.get(row);
    } // getRow
 
    public void deleteRow(int row) {
-      data.remove(getRow(row));
+      tableRows.remove(getRow(row));
    } // deleteRow
 
    public ArrayList<String []> getAllRows() {
-      return data;
+      return tableRows;
    } // getAllRows
 
    public String toString() {
-      String string = "Table:\nName:\t\t" + getTableName() + "\nColumns:\t" + getNumberOfColumns() + "\nRows:\t\t" + getNumberOfRows() + "\n";
+      String string = "Table:\t\t" + getTableName() + "\nColumns:\t" + getNumberOfColumns() + "\nRows:\t\t" + getNumberOfRows() + "\n";
       string += s.arrayToString(columnNames) + "\n";
       for (int i = 0; i < getNumberOfRows(); i++)
          string += s.arrayToString(getRow(i)) + "\n";

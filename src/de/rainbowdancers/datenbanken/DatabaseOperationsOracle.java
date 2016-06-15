@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import de.rainbowdancers.exceptions.DifferentNumberOfColumnsException;
+import de.rainbowdancers.exceptions.DifferentAmountOfColumnsException;
 import tobi_wan.dataStructure.Table;
 import tobi_wan.support.StandardOutput;
 
@@ -163,8 +163,8 @@ public class DatabaseOperationsOracle {
       }
    }
 
-   public void insertTransaction(Table table, String... datatypesOfColumns) throws DifferentNumberOfColumnsException, SQLException {
-      if (table.getNumberOfColumns() != datatypesOfColumns.length) throw new DifferentNumberOfColumnsException();
+   public void insertTransaction(Table table, String... datatypesOfColumns) throws DifferentAmountOfColumnsException, SQLException {
+      if (table.getNumberOfColumns() != datatypesOfColumns.length) throw new DifferentAmountOfColumnsException();
       setPreparedStatement(makeInsertIntoString(table));
       for (String [] row : table.getAllRows()) {
          insertOneTablerowIntoPreparedStatement(row, datatypesOfColumns);

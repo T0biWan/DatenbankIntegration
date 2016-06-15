@@ -2,8 +2,9 @@ package de.rainbowdancers.datenbanken;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import de.rainbowdancers.exceptions.DifferentNumberOfColumnsException;
+import de.rainbowdancers.exceptions.DifferentAmountOfColumnsException;
 import de.rainbowdancers.exceptions.NotEnoughColumnsException;
+import tobi_wan.IO.IOStreamTableCSV;
 import tobi_wan.dataStructure.Table;
 import tobi_wan.support.StandardOutput;
 
@@ -79,7 +80,7 @@ public class Main {
          s.print("Insert data:\t");
          dbo.insertTransaction(table, datatypesOfColumns);
          s.println("Succesful\n");
-      } catch (DifferentNumberOfColumnsException e) {
+      } catch (DifferentAmountOfColumnsException e) {
          e.printStackTrace();
       } catch (SQLException e) {
          e.printStackTrace();
