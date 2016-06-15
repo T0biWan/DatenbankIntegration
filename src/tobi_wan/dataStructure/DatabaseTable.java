@@ -10,9 +10,10 @@ public class DatabaseTable extends Table {
    private String [] datatypesOfColumns;
    private int       columnOfPrimaryKey;
    private int []    columnsOfForeignKeys;
+   private String [] foreignKeyReferences;
 
    // Konstruktor
-   public DatabaseTable(String tableName, String [] columnNames, String [] datatypesOfColumns, int columnOfPrimaryKey, int [] columnsOfForeignKeys)
+   public DatabaseTable(String tableName, String [] columnNames, String [] datatypesOfColumns, int columnOfPrimaryKey, int [] columnsOfForeignKeys, String [] foreignKeyReferences)
          throws DifferentAmountOfColumnsException, NoValidNumberForPrimaryKeyException {
       super(tableName, columnNames);
       if (super.getNumberOfColumns() != datatypesOfColumns.length || super.getNumberOfColumns() < columnsOfForeignKeys.length) throw new DifferentAmountOfColumnsException();
@@ -20,6 +21,7 @@ public class DatabaseTable extends Table {
       setDatatypesOfColumns(datatypesOfColumns);
       setColumnOfPrimaryKey(columnOfPrimaryKey);
       setColumnsOfForeignKeys(columnsOfForeignKeys);
+      setForeignKeyReferences(foreignKeyReferences);
    }
 
    // Getter & Setter
@@ -45,6 +47,14 @@ public class DatabaseTable extends Table {
 
    public void setColumnsOfForeignKeys(int [] columnsOfForeignKeys) {
       this.columnsOfForeignKeys = columnsOfForeignKeys;
+   }
+
+   public String [] getForeignKeyReferences() {
+      return foreignKeyReferences;
+   }
+
+   public void setForeignKeyReferences(String [] foreignKeyReferences) {
+      this.foreignKeyReferences = foreignKeyReferences;
    }
 
    // Methoden

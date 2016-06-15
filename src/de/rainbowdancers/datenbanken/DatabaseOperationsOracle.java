@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import de.rainbowdancers.exceptions.DifferentAmountOfColumnsException;
+import tobi_wan.dataStructure.DatabaseTable;
 import tobi_wan.dataStructure.Table;
 import tobi_wan.support.StandardOutput;
 
@@ -106,19 +107,17 @@ public class DatabaseOperationsOracle {
       return true;
    }
 
-   public String makeCreateTableString(Table table, int columnNumberOfPrimaryKey, String... datatypesOfColumns) {
+   public String makeCreateTableString(DatabaseTable table) {
       String returnString = "CREATE TABLE " + table.getTableName() + "(";
       for (int i = 0; i < table.getNumberOfColumns(); i++) {
          returnString += table.getColumnNames()[i] + " ";
-         switch (datatypesOfColumns[i]) {
-            case "int":
-               returnString += "NUMBER(38,0)";
-               break;
-            case "String":
-               returnString += "VARCHAR2(128 BYTE)";
-               break;
+         if (table.getDatatypesOfColumns()[i] == "int")
+            returnString += "NUMBER(38,0)";
+         else if (table.getDatatypesOfColumns()[i] == "String") returnString += "VARCHAR2(128 BYTE)";
+         if (table.getColumnOfPrimaryKey() == i) returnString += " NOT NULL PRIMARY KEY";
+         for (int index : table.getColumnsOfForeignKeys()) {
+            if (index == i) returnString += " FOREING KEY REFERENCES " + table.getForeignKeyReferences()[0];
          }
-         if (i + 1 == columnNumberOfPrimaryKey) returnString += " NOT NULL PRIMARY KEY ";
          if (i < table.getNumberOfColumns() - 1) returnString += ", ";
       }
       returnString += ")";
@@ -144,8 +143,8 @@ public class DatabaseOperationsOracle {
       return connection.prepareStatement(preparedStatement);
    }
 
-   public void createTableTransaction(Table table, int columnNumberOfPrimaryKey, String... datatypesOfColumns) throws SQLException {
-      setPreparedStatement(makeCreateTableString(table, columnNumberOfPrimaryKey, datatypesOfColumns));
+   public void createTableTransaction(DatabaseTable table, int columnNumberOfPrimaryKey, String... datatypesOfColumns) throws SQLException {
+      setPreparedStatement(makeCreateTableString(table));
       getPreparedStatement().execute();
       getPreparedStatement().close();
    }
