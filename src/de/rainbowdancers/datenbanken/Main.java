@@ -33,7 +33,7 @@ public class Main {
       dbo.connect();
       s.println();
 
-      csvToOracleTable(brands, "data/Brands.csv");
+      // csvToOracleTable(brands, "data/Brands.csv");
       // csvToOracleTable(clothing, "data/Clothing.csv");
       // csvToOracleTable(colors, "data/Colors.csv");
       // csvToOracleTable(onlineShops, "data/OnlineShops.csv");
@@ -56,9 +56,8 @@ public class Main {
          clothing = new DatabaseTable("Clothing", new String [] { "ClothingID", "Category" }, new String [] { "int", "String" }, 0, new int [] {}, new String [] {});
          colors = new DatabaseTable("Colors", new String [] { "ColorID", "Color" }, new String [] { "int", "String" }, 0, new int [] {}, new String [] {});
          onlineShops = new DatabaseTable("OnlineShops", new String [] { "ShopID", "Shop" }, new String [] { "int", "String" }, 0, new int [] {}, new String [] {});
-         outfits = new DatabaseTable("Outfit", new String [] { "OutfitID", "Actor", "Category", "Subcategory", "Brand", "Color" },
-               new String [] { "int", "String", "String", "String", "String", "String" }, 0, new int [] { 2, 3, 4, 5 },
-               new String [] { "Clothing(ClothingID)", "Clothing(ClothingID)", "Brands(BrandID)", "Colors(ColorID)" });
+         outfits = new DatabaseTable("Outfits", new String [] { "OutfitID", "Actor", "Category", "Subcategory", "Brand", "Color" }, new String [] { "int", "String", "int", "int", "int", "int" }, 0,
+               new int [] { 2, 3, 4, 5 }, new String [] { "Clothing(ClothingID)", "Clothing(ClothingID)", "Brands(BrandID)", "Colors(ColorID)" });
       } catch (DifferentAmountOfColumnsException e) {
          e.printStackTrace();
       } catch (NoValidNumberForPrimaryKeyException e) {

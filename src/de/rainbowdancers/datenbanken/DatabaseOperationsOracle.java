@@ -105,6 +105,23 @@ public class DatabaseOperationsOracle {
       return true;
    }
 
+   // create table Outfits (
+   // OutfitID NUMBER(38,0) NOT NULL PRIMARY KEY,
+   // Actor VARCHAR2(128 BYTE),
+   // Category NUMBER(38,0),
+   // Subcategory NUMBER(38,0),
+   // Brand NUMBER(38,0),
+   // Color NUMBER(38,0),
+   // constraint fk_category foreign key (Category)
+   // references Clothing(ClothingID),
+   // constraint fk_subcategory foreign key (Subcategory)
+   // references Clothing(ClothingID),
+   // constraint fk_brand foreign key (Brand)
+   // references Brands(BrandID),
+   // constraint fk_color foreign key (Color)
+   // references Colors(ColorID)
+   // );
+
    public String makeCreateTableString(DatabaseTable table) {
       String returnString = "CREATE TABLE " + table.getTableName() + "(";
       for (int i = 0; i < table.getNumberOfColumns(); i++) {
@@ -113,10 +130,13 @@ public class DatabaseOperationsOracle {
             returnString += "NUMBER(38,0)";
          else if (table.getDatatypesOfColumns()[i] == "String") returnString += "VARCHAR2(128 BYTE)";
          if (table.getColumnOfPrimaryKey() == i) returnString += " NOT NULL PRIMARY KEY";
-         for (int index : table.getColumnsOfForeignKeys()) {
-            if (index == i) returnString += " FOREING KEY REFERENCES " + table.getForeignKeys().get(i);
-         }
          if (i < table.getNumberOfColumns() - 1) returnString += ", ";
+      }
+      for (int i = 0; i < table.getColumnsOfForeignKeys().length; i++) {
+         String columnName = table.getColumnNames()[table.getColumnsOfForeignKeys()[i]];
+         String referenz = table.getForeignKeys().get(table.getColumnsOfForeignKeys()[i]);
+         returnString += ", CONSTRAINT fk_" + columnName + " FOREIGN KEY (" + columnName + ") ";
+         returnString += "REFERENCES " + referenz;
       }
       returnString += ")";
       return returnString;
@@ -149,31 +169,6 @@ public class DatabaseOperationsOracle {
 
    public void insertTransaction(DatabaseTable table) throws SQLException {
       setPreparedStatement(makeInsertIntoString(table));
-      // for (int row = 0; row < table.getNumberOfRows(); row++) {
-      // for (int column = 0; column < table.getNumberOfColumns(); column++) {
-      // int sqlColumn = column + 1;
-      // if (table.getDatatypesOfColumns()[column] == "int") {
-      // getPreparedStatement().setInt(1, 1);
-      // // standardOutput.println("Row: " + row + "\tColumn: " +
-      // // sqlColumn);
-      // getPreparedStatement().execute();
-      // } else if (table.getDatatypesOfColumns()[column] == "String") {
-      // getPreparedStatement().setString(2, "Test");
-      // // standardOutput.println("Row: " + row + "\tColumn: " +
-      // // sqlColumn);
-      // getPreparedStatement().execute();
-      // }
-      // // getPreparedStatement().execute();
-      // }
-      // }
-
-      // for (int row = 0; row < table.getNumberOfRows(); row++) {
-      // getPreparedStatement().setInt(1,
-      // Integer.parseInt(table.getRow(row)[0]));
-      // getPreparedStatement().setString(2, table.getRow(row)[1]);
-      // getPreparedStatement().execute();
-      // }
-
       for (int row = 0; row < table.getNumberOfRows(); row++) {
          for (int column = 0; column < table.getNumberOfColumns(); column++) {
             int sqlColumn = column + 1;
@@ -185,16 +180,6 @@ public class DatabaseOperationsOracle {
          }
          getPreparedStatement().execute();
       }
-
-      // int row = 0;
-      // int column = 0;
-      // int sqlColumn = column + 1;
-      // getPreparedStatement().setInt(sqlColumn,
-      // Integer.parseInt(table.getRow(row)[column]));
-      // getPreparedStatement().setString(column + 2,
-      // table.getRow(row)[column]);
-      // getPreparedStatement().execute();
-
       getPreparedStatement().close();
    }
 

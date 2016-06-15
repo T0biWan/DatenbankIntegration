@@ -20,8 +20,9 @@ public class Test {
    // Methoden
    public static void main(String [] args) {
       initialiseAttributes();
-      s.print(dboo.makeInsertIntoString(table));
-
+      s.println(dboo.makeCreateTableString(table));
+      s.println(dboo.makeInsertIntoString(table));
+      s.println(table.toString());
    }
 
    private static void initialiseAttributes() {
@@ -30,9 +31,8 @@ public class Test {
       // (String tableName, String [] columnNames, String [] datatypesOfColumns,
       // int columnOfPrimaryKey, int [] columnsOfForeignKeys))
       try {
-         table = new DatabaseTable("Outfit", new String [] { "OutfitID", "Actor", "Category", "Subcategory", "Brand", "Color" },
-               new String [] { "int", "String", "String", "String", "String", "String" }, 0, new int [] { 2, 3, 4, 5 },
-               new String [] { "Clothing(ClothingID)", "Clothing(ClothingID)", "Brands(BrandID)", "Colors(ColorID)" });
+         table = new DatabaseTable("Outfits", new String [] { "OutfitID", "Actor", "Category", "Subcategory", "Brand", "Color" }, new String [] { "int", "String", "int", "int", "int", "int" }, 0,
+               new int [] { 2, 3, 4, 5 }, new String [] { "Clothing(ClothingID)", "Clothing(ClothingID)", "Brands(BrandID)", "Colors(ColorID)" });
       } catch (DifferentAmountOfColumnsException e) {
          e.printStackTrace();
       } catch (NoValidNumberForPrimaryKeyException e) {
