@@ -1,5 +1,6 @@
 package tobi_wan.dataStructure;
 
+import java.util.HashMap;
 import de.rainbowdancers.exceptions.DifferentAmountOfColumnsException;
 import de.rainbowdancers.exceptions.NoValidNumberForPrimaryKeyException;
 
@@ -7,10 +8,11 @@ import de.rainbowdancers.exceptions.NoValidNumberForPrimaryKeyException;
 
 public class DatabaseTable extends Table {
    // Attribute
-   private String [] datatypesOfColumns;
-   private int       columnOfPrimaryKey;
-   private int []    columnsOfForeignKeys;
-   private String [] foreignKeyReferences;
+   private String []                datatypesOfColumns;
+   private int                      columnOfPrimaryKey;
+   private int []                   columnsOfForeignKeys;
+   private String []                foreignKeyReferences;
+   private HashMap<Integer, String> foreignKeys;
 
    // Konstruktor
    public DatabaseTable(String tableName, String [] columnNames, String [] datatypesOfColumns, int columnOfPrimaryKey, int [] columnsOfForeignKeys, String [] foreignKeyReferences)
@@ -22,6 +24,7 @@ public class DatabaseTable extends Table {
       setColumnOfPrimaryKey(columnOfPrimaryKey);
       setColumnsOfForeignKeys(columnsOfForeignKeys);
       setForeignKeyReferences(foreignKeyReferences);
+      setForeignKeys();
    }
 
    // Getter & Setter
@@ -55,6 +58,11 @@ public class DatabaseTable extends Table {
 
    public void setForeignKeyReferences(String [] foreignKeyReferences) {
       this.foreignKeyReferences = foreignKeyReferences;
+   }
+
+   public void setForeignKeys() {
+      for (int index : columnsOfForeignKeys)
+         foreignKeys.put(getColumnsOfForeignKeys()[index], getForeignKeyReferences()[index]);
    }
 
    // Methoden
