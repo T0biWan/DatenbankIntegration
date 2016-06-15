@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import de.rainbowdancers.exceptions.DifferentAmountOfColumnsException;
 import tobi_wan.dataStructure.DatabaseTable;
-import tobi_wan.dataStructure.Table;
 import tobi_wan.support.StandardOutput;
 
 
@@ -124,7 +123,7 @@ public class DatabaseOperationsOracle {
       return returnString;
    }
 
-   public String makeInsertIntoString(Table table) {
+   public String makeInsertIntoString(DatabaseTable table) {
       String returnString = "INSERT INTO " + table.getTableName() + " (";
       for (int i = 0; i < table.getNumberOfColumns(); i++) {
          returnString += table.getColumnNames()[i];
@@ -143,31 +142,21 @@ public class DatabaseOperationsOracle {
       return connection.prepareStatement(preparedStatement);
    }
 
-   public void createTableTransaction(DatabaseTable table, int columnNumberOfPrimaryKey, String... datatypesOfColumns) throws SQLException {
+   public void createTableTransaction(DatabaseTable table) throws SQLException {
       setPreparedStatement(makeCreateTableString(table));
       getPreparedStatement().execute();
       getPreparedStatement().close();
    }
 
-   public void insertOneTablerowIntoPreparedStatement(String [] tablerow, String... datatypesOfColumns) throws NumberFormatException, SQLException {
-      for (int i = 0; i < tablerow.length; i++) {
-         switch (datatypesOfColumns[i]) {
-            case "int":
-               getPreparedStatement().setInt(i + 1, Integer.parseInt(tablerow[i]));
-               break;
-            case "String":
-               getPreparedStatement().setString(i + 1, tablerow[i]);
-               break;
-         }
-      }
-   }
-
-   public void insertTransaction(Table table, String... datatypesOfColumns) throws DifferentAmountOfColumnsException, SQLException {
-      if (table.getNumberOfColumns() != datatypesOfColumns.length) throw new DifferentAmountOfColumnsException();
+   public void insertTransaction(DatabaseTable table) throws DifferentAmountOfColumnsException, SQLException {
       setPreparedStatement(makeInsertIntoString(table));
-      for (String [] row : table.getAllRows()) {
-         insertOneTablerowIntoPreparedStatement(row, datatypesOfColumns);
-         getPreparedStatement().execute();
+      for (int row = 0; row < table.getNumberOfRows(); row++) {
+         for (int column = 0; column < table.getNumberOfColumns(); column++) {
+            if (table.getDatatypesOfColumns()[column] == "int")
+               getPreparedStatement().setInt(column + 1, Integer.parseInt(table.getRow(row)[column]));
+            else if (table.getDatatypesOfColumns()[column] == "String") getPreparedStatement().setString(column + 1, table.getRow(row)[column]);
+            getPreparedStatement().execute();
+         }
       }
       getPreparedStatement().close();
    }

@@ -1,10 +1,12 @@
 package de.rainbowdancers.datenbanken;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import de.rainbowdancers.exceptions.DifferentAmountOfColumnsException;
 import de.rainbowdancers.exceptions.NoValidNumberForPrimaryKeyException;
+import de.rainbowdancers.exceptions.NotEnoughColumnsException;
 import tobi_wan.IO.IOStreamTableCSV;
 import tobi_wan.dataStructure.DatabaseTable;
-import tobi_wan.dataStructure.Table;
 import tobi_wan.support.StandardOutput;
 
 
@@ -28,16 +30,16 @@ public class Main {
       initialiseAttributes();
       dbo.printFields();
       s.printlnSeparation();
-      // dbo.connect();
+      dbo.connect();
       s.println();
 
-      csvToOracleTable(brands, "data/Brands.csv", 1, "int", "String");
-      csvToOracleTable(clothing, "data/Clothing.csv", 1, "int", "String");
-      csvToOracleTable(colors, "data/Colors.csv", 1, "int", "String");
-      csvToOracleTable(onlineShops, "data/OnlineShops.csv", 1, "int", "String");
-      csvToOracleTable(outfits, "data/Outfits.csv", 1, "int", "String", "String", "String", "String", "String");
+      csvToOracleTable(brands, "data/Brands.csv");
+      csvToOracleTable(clothing, "data/Clothing.csv");
+      csvToOracleTable(colors, "data/Colors.csv");
+      csvToOracleTable(onlineShops, "data/OnlineShops.csv");
+      csvToOracleTable(outfits, "data/Outfits.csv");
 
-      // dbo.disconnect();
+      dbo.disconnect();
       s.printlnSeparation();
    }
 
@@ -65,41 +67,34 @@ public class Main {
 
    }
 
-   private static void csvToOracleTable(Table table, String path, int columnNumberOfPrimaryKey, String... datatypesOfColumns) {
+   private static void csvToOracleTable(DatabaseTable table, String path) {
       s.println("Table:\t\t" + table.getTableName());
       s.println("Source:\t\t" + path);
-      s.print("Read input:\t");
-      s.println("Succesful");
-      s.print("Create table:\t");
-      s.println("Succesful");
-      s.print("Insert data:\t");
-      s.println("Succesful\n");
-      // try {
-      // s.print("Read input:\t");
-      // io.readCSVIntoTable(path, table);
-      // s.println("Succesful");
-      // } catch (IOException e) {
-      // e.printStackTrace();
-      // } catch (NotEnoughColumnsException e) {
-      // e.printStackTrace();
-      // }
-      // try {
-      // s.print("Create table:\t");
-      // dbo.createTableTransaction(table, columnNumberOfPrimaryKey,
-      // datatypesOfColumns);
-      // s.println("Succesful");
-      // } catch (SQLException e) {
-      // e.printStackTrace();
-      // }
-      // try {
-      // s.print("Insert data:\t");
-      // dbo.insertTransaction(table, datatypesOfColumns);
-      // s.println("Succesful\n");
-      // } catch (DifferentAmountOfColumnsException e) {
-      // e.printStackTrace();
-      // } catch (SQLException e) {
-      // e.printStackTrace();
-      // }
+      try {
+         s.print("Read input:\t");
+         io.readCSVIntoTable(path, table);
+         s.println("Succesful");
+      } catch (IOException e) {
+         e.printStackTrace();
+      } catch (NotEnoughColumnsException e) {
+         e.printStackTrace();
+      }
+      try {
+         s.print("Create table:\t");
+         dbo.createTableTransaction(table);
+         s.println("Succesful");
+      } catch (SQLException e) {
+         e.printStackTrace();
+      }
+      try {
+         s.print("Insert data:\t");
+         dbo.insertTransaction(table);
+         s.println("Succesful\n");
+      } catch (DifferentAmountOfColumnsException e) {
+         e.printStackTrace();
+      } catch (SQLException e) {
+         e.printStackTrace();
+      }
    }
 
 }
