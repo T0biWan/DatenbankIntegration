@@ -1,10 +1,9 @@
 package de.rainbowdancers.datenbanken;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import de.rainbowdancers.exceptions.DifferentAmountOfColumnsException;
-import de.rainbowdancers.exceptions.NotEnoughColumnsException;
+import de.rainbowdancers.exceptions.NoValidNumberForPrimaryKeyException;
 import tobi_wan.IO.IOStreamTableCSV;
+import tobi_wan.dataStructure.DatabaseTable;
 import tobi_wan.dataStructure.Table;
 import tobi_wan.support.StandardOutput;
 
@@ -18,18 +17,18 @@ public class Main {
    static String                   password;
    static DatabaseOperationsOracle dbo;
    static IOStreamTableCSV         io;
-   static Table                    brands;
-   static Table                    clothing;
-   static Table                    colors;
-   static Table                    onlineShops;
-   static Table                    outfits;
+   static DatabaseTable            brands;
+   static DatabaseTable            clothing;
+   static DatabaseTable            colors;
+   static DatabaseTable            onlineShops;
+   static DatabaseTable            outfits;
 
    // Methoden
    public static void main(String [] args) {
       initialiseAttributes();
       dbo.printFields();
       s.printlnSeparation();
-      dbo.connect();
+      // dbo.connect();
       s.println();
 
       csvToOracleTable(brands, "data/Brands.csv", 1, "int", "String");
@@ -38,7 +37,7 @@ public class Main {
       csvToOracleTable(onlineShops, "data/OnlineShops.csv", 1, "int", "String");
       csvToOracleTable(outfits, "data/Outfits.csv", 1, "int", "String", "String", "String", "String", "String");
 
-      dbo.disconnect();
+      // dbo.disconnect();
       s.printlnSeparation();
    }
 
@@ -50,41 +49,56 @@ public class Main {
       s.printlnSeparation();
       dbo = new DatabaseOperationsOracle(connectionString, user, password);
       io = new IOStreamTableCSV(";");
-      brands = new Table("Brands", new String [] { "BrandID", "Brand" });
-      clothing = new Table("Clothing", new String [] { "ClothingID", "Category" });
-      colors = new Table("Colors", new String [] { "ColorID", "Color" });
-      onlineShops = new Table("OnlineShops", new String [] { "ShopID", "Shop" });
-      outfits = new Table("Outfits", new String [] { "OutfitID", "Actor", "Category", "Subcategory", "Brand", "Color" });
+      try {
+         brands = new DatabaseTable("Brands", new String [] { "BrandID", "Brand" }, new String [] { "int", "String" }, 0, new int [] {});
+         clothing = new DatabaseTable("Clothing", new String [] { "ClothingID", "Category" }, new String [] { "int", "String" }, 0, new int [] {});
+         colors = new DatabaseTable("Colors", new String [] { "ColorID", "Color" }, new String [] { "int", "String" }, 0, new int [] {});
+         onlineShops = new DatabaseTable("OnlineShops", new String [] { "ShopID", "Shop" }, new String [] { "int", "String" }, 0, new int [] {});
+         outfits = new DatabaseTable("Outfit", new String [] { "OutfitID", "Actor", "Category", "Subcategory", "Brand", "Color" },
+               new String [] { "int", "String", "String", "String", "String", "String" }, 0, new int [] { 2, 3, 4, 5 });
+      } catch (DifferentAmountOfColumnsException e) {
+         e.printStackTrace();
+      } catch (NoValidNumberForPrimaryKeyException e) {
+         e.printStackTrace();
+      }
+
    }
 
    private static void csvToOracleTable(Table table, String path, int columnNumberOfPrimaryKey, String... datatypesOfColumns) {
       s.println("Table:\t\t" + table.getTableName());
       s.println("Source:\t\t" + path);
-      try {
-         s.print("Read input:\t");
-         io.readCSVIntoTable(path, table);
-         s.println("Succesful");
-      } catch (IOException e) {
-         e.printStackTrace();
-      } catch (NotEnoughColumnsException e) {
-         e.printStackTrace();
-      }
-      try {
-         s.print("Create table:\t");
-         dbo.createTableTransaction(table, columnNumberOfPrimaryKey, datatypesOfColumns);
-         s.println("Succesful");
-      } catch (SQLException e) {
-         e.printStackTrace();
-      }
-      try {
-         s.print("Insert data:\t");
-         dbo.insertTransaction(table, datatypesOfColumns);
-         s.println("Succesful\n");
-      } catch (DifferentAmountOfColumnsException e) {
-         e.printStackTrace();
-      } catch (SQLException e) {
-         e.printStackTrace();
-      }
+      s.print("Read input:\t");
+      s.println("Succesful");
+      s.print("Create table:\t");
+      s.println("Succesful");
+      s.print("Insert data:\t");
+      s.println("Succesful\n");
+      // try {
+      // s.print("Read input:\t");
+      // io.readCSVIntoTable(path, table);
+      // s.println("Succesful");
+      // } catch (IOException e) {
+      // e.printStackTrace();
+      // } catch (NotEnoughColumnsException e) {
+      // e.printStackTrace();
+      // }
+      // try {
+      // s.print("Create table:\t");
+      // dbo.createTableTransaction(table, columnNumberOfPrimaryKey,
+      // datatypesOfColumns);
+      // s.println("Succesful");
+      // } catch (SQLException e) {
+      // e.printStackTrace();
+      // }
+      // try {
+      // s.print("Insert data:\t");
+      // dbo.insertTransaction(table, datatypesOfColumns);
+      // s.println("Succesful\n");
+      // } catch (DifferentAmountOfColumnsException e) {
+      // e.printStackTrace();
+      // } catch (SQLException e) {
+      // e.printStackTrace();
+      // }
    }
 
 }
