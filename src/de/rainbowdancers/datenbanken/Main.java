@@ -57,6 +57,8 @@ public class Main {
    }
 
    private static void csvToOracleTable(Table table, String path, int columnNumberOfPrimaryKey, String... datatypesOfColumns) {
+      s.println("Table:\t\t" + table.getTableName());
+      s.println("Source:\t\t" + path);
       try {
          s.print("Read input:\t");
          io.readCSVIntoTable(path, table);
