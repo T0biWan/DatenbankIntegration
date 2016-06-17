@@ -141,7 +141,7 @@ public class DatabaseOperationsOracle {
    }
 
    public String makeDropTableString(DatabaseTable table) {
-      return "DROB TABLE " + table.getTableName();
+      return "DROP TABLE " + table.getTableName() + " CASCADE CONSTRAINTS PURGE";
    }
 
    public PreparedStatement makePreparedStatement(String preparedStatement) throws SQLException {
@@ -170,8 +170,8 @@ public class DatabaseOperationsOracle {
       getPreparedStatement().close();
    }
 
-   public void dropTable(DatabaseTable table) throws SQLException {
-      setPreparedStatement(makeCreateTableString(table));
+   public void dropTableTransaction(DatabaseTable table) throws SQLException {
+      setPreparedStatement(makeDropTableString(table));
       getPreparedStatement().execute();
       getPreparedStatement().close();
    }

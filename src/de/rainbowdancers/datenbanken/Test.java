@@ -27,11 +27,13 @@ public class Test {
    public static void main(String [] args) {
       initialiseAttributes();
       try {
-         dbo.dropTable(brands);
-         dbo.dropTable(clothing);
-         dbo.dropTable(colors);
-         dbo.dropTable(onlineShops);
-         dbo.dropTable(outfits);
+         dbo.connect();
+         dbo.dropTableTransaction(brands);
+         dbo.dropTableTransaction(clothing);
+         dbo.dropTableTransaction(colors);
+         dbo.dropTableTransaction(onlineShops);
+         dbo.dropTableTransaction(outfits);
+         dbo.disconnect();
       } catch (SQLException e) {
          e.printStackTrace();
       }
