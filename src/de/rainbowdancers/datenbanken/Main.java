@@ -63,7 +63,6 @@ public class Main {
       } catch (NoValidNumberForPrimaryKeyException e) {
          e.printStackTrace();
       }
-
    }
 
    private static void csvToOracleTable(DatabaseTable table, String path) {

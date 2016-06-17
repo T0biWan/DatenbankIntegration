@@ -87,7 +87,7 @@ public class DatabaseTable extends Table {
 
       }
       string += s.arrayToString(super.getColumnNames()) + "\n";
-      string += s.arrayToString(getDatatypesOfColumns());
+      string += s.arrayToString(getDatatypesOfColumns()) + "\n";
       for (int i = 0; i < getNumberOfRows(); i++)
          string += s.arrayToString(getRow(i)) + "\n";
       return string;

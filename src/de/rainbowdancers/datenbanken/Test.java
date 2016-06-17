@@ -1,9 +1,8 @@
 package de.rainbowdancers.datenbanken;
 
-import java.io.IOException;
+import java.sql.SQLException;
 import de.rainbowdancers.exceptions.DifferentAmountOfColumnsException;
 import de.rainbowdancers.exceptions.NoValidNumberForPrimaryKeyException;
-import de.rainbowdancers.exceptions.NotEnoughColumnsException;
 import tobi_wan.IO.IOStreamTableCSV;
 import tobi_wan.dataStructure.DatabaseTable;
 import tobi_wan.support.StandardOutput;
@@ -13,41 +12,51 @@ import tobi_wan.support.StandardOutput;
 public class Test {
    // Attribute
    static StandardOutput           s;
-   static DatabaseTable            table;
-   static DatabaseOperationsOracle dboo;
+   static String                   connectionString;
+   static String                   user;
+   static String                   password;
+   static DatabaseOperationsOracle dbo;
    static IOStreamTableCSV         io;
+   static DatabaseTable            brands;
+   static DatabaseTable            clothing;
+   static DatabaseTable            colors;
+   static DatabaseTable            onlineShops;
+   static DatabaseTable            outfits;
 
    // Methoden
    public static void main(String [] args) {
       initialiseAttributes();
-      s.println(dboo.makeCreateTableString(table));
-      s.println(dboo.makeInsertIntoString(table));
-      s.println(table.toString());
+      try {
+         dbo.dropTable(brands);
+         dbo.dropTable(clothing);
+         dbo.dropTable(colors);
+         dbo.dropTable(onlineShops);
+         dbo.dropTable(outfits);
+      } catch (SQLException e) {
+         e.printStackTrace();
+      }
    }
 
    private static void initialiseAttributes() {
       s = new StandardOutput("*", 80);
+      connectionString = "jdbc:oracle:thin:@dbl43.beuth-hochschule.de:1521:oracle";
+      user = "KLATT";
+      password = "Student";
+      s.printlnSeparation();
+      dbo = new DatabaseOperationsOracle(connectionString, user, password);
       io = new IOStreamTableCSV(";");
-      // (String tableName, String [] columnNames, String [] datatypesOfColumns,
-      // int columnOfPrimaryKey, int [] columnsOfForeignKeys))
       try {
-         table = new DatabaseTable("Outfits", new String [] { "OutfitID", "Actor", "Category", "Subcategory", "Brand", "Color" }, new String [] { "int", "String", "int", "int", "int", "int" }, 0,
+         brands = new DatabaseTable("Brands", new String [] { "BrandID", "Brand" }, new String [] { "int", "String" }, 0, new int [] {}, new String [] {});
+         clothing = new DatabaseTable("Clothing", new String [] { "ClothingID", "Category" }, new String [] { "int", "String" }, 0, new int [] {}, new String [] {});
+         colors = new DatabaseTable("Colors", new String [] { "ColorID", "Color" }, new String [] { "int", "String" }, 0, new int [] {}, new String [] {});
+         onlineShops = new DatabaseTable("OnlineShops", new String [] { "ShopID", "Shop" }, new String [] { "int", "String" }, 0, new int [] {}, new String [] {});
+         outfits = new DatabaseTable("Outfits", new String [] { "OutfitID", "Actor", "Category", "Subcategory", "Brand", "Color" }, new String [] { "int", "String", "int", "int", "int", "int" }, 0,
                new int [] { 2, 3, 4, 5 }, new String [] { "Clothing(ClothingID)", "Clothing(ClothingID)", "Brands(BrandID)", "Colors(ColorID)" });
       } catch (DifferentAmountOfColumnsException e) {
          e.printStackTrace();
       } catch (NoValidNumberForPrimaryKeyException e) {
          e.printStackTrace();
       }
-      try {
-         s.print("Read input:\t");
-         io.readCSVIntoTable("data/Outfits.csv", table);
-         s.println("Succesful");
-      } catch (IOException e) {
-         e.printStackTrace();
-      } catch (NotEnoughColumnsException e) {
-         e.printStackTrace();
-      }
-      dboo = new DatabaseOperationsOracle("jdbc:oracle:thin:@dbl43.beuth-hochschule.de:1521:oracle", "KLATT", "Student");
    }
 
 }

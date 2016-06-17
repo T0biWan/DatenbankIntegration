@@ -105,23 +105,6 @@ public class DatabaseOperationsOracle {
       return true;
    }
 
-   // create table Outfits (
-   // OutfitID NUMBER(38,0) NOT NULL PRIMARY KEY,
-   // Actor VARCHAR2(128 BYTE),
-   // Category NUMBER(38,0),
-   // Subcategory NUMBER(38,0),
-   // Brand NUMBER(38,0),
-   // Color NUMBER(38,0),
-   // constraint fk_category foreign key (Category)
-   // references Clothing(ClothingID),
-   // constraint fk_subcategory foreign key (Subcategory)
-   // references Clothing(ClothingID),
-   // constraint fk_brand foreign key (Brand)
-   // references Brands(BrandID),
-   // constraint fk_color foreign key (Color)
-   // references Colors(ColorID)
-   // );
-
    public String makeCreateTableString(DatabaseTable table) {
       String returnString = "CREATE TABLE " + table.getTableName() + "(";
       for (int i = 0; i < table.getNumberOfColumns(); i++) {
@@ -157,6 +140,10 @@ public class DatabaseOperationsOracle {
       return returnString;
    }
 
+   public String makeDropTableString(DatabaseTable table) {
+      return "DROB TABLE " + table.getTableName();
+   }
+
    public PreparedStatement makePreparedStatement(String preparedStatement) throws SQLException {
       return connection.prepareStatement(preparedStatement);
    }
@@ -180,6 +167,12 @@ public class DatabaseOperationsOracle {
          }
          getPreparedStatement().execute();
       }
+      getPreparedStatement().close();
+   }
+
+   public void dropTable(DatabaseTable table) throws SQLException {
+      setPreparedStatement(makeCreateTableString(table));
+      getPreparedStatement().execute();
       getPreparedStatement().close();
    }
 

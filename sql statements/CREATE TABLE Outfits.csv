@@ -1,0 +1,11 @@
+CREATE TABLE Outfits(
+OutfitID NUMBER(38,0) NOT NULL PRIMARY KEY,
+Actor VARCHAR2(128 BYTE),
+Category NUMBER(38,0),
+Subcategory NUMBER(38,0),
+Brand NUMBER(38,0),
+Color NUMBER(38,0),
+CONSTRAINT fk_Category FOREIGN KEY (Category) REFERENCES Clothing(ClothingID),
+CONSTRAINT fk_Subcategory FOREIGN KEY (Subcategory) REFERENCES Clothing(ClothingID),
+CONSTRAINT fk_Brand FOREIGN KEY (Brand) REFERENCES Brands(BrandID),
+CONSTRAINT fk_Color FOREIGN KEY (Color) REFERENCES Colors(ColorID))
