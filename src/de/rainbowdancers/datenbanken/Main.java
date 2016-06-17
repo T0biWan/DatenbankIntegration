@@ -33,10 +33,10 @@ public class Main {
       dbo.connect();
       s.println();
 
-      csvToOracleTable(brands, "data/Brands.csv");
-      csvToOracleTable(clothing, "data/Clothing.csv");
-      csvToOracleTable(colors, "data/Colors.csv");
-      csvToOracleTable(onlineShops, "data/OnlineShops.csv");
+      // csvToOracleTable(brands, "data/Brands.csv");
+      // csvToOracleTable(clothing, "data/Clothing.csv");
+      // csvToOracleTable(colors, "data/Colors.csv");
+      // csvToOracleTable(onlineShops, "data/OnlineShops.csv");
       csvToOracleTable(outfits, "data/Outfits.csv");
 
       dbo.disconnect();

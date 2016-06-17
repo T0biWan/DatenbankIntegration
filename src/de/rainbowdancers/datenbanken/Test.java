@@ -28,10 +28,10 @@ public class Test {
       initialiseAttributes();
       try {
          dbo.connect();
-         dbo.dropTableTransaction(brands);
-         dbo.dropTableTransaction(clothing);
-         dbo.dropTableTransaction(colors);
-         dbo.dropTableTransaction(onlineShops);
+         // dbo.dropTableTransaction(brands);
+         // dbo.dropTableTransaction(clothing);
+         // dbo.dropTableTransaction(colors);
+         // dbo.dropTableTransaction(onlineShops);
          dbo.dropTableTransaction(outfits);
          dbo.disconnect();
       } catch (SQLException e) {
