@@ -9,8 +9,6 @@ import tobi_wan.support.StandardOutput;
 
 
 
-//
-
 public class Test {
    // Attribute
    static StandardOutput           s;
