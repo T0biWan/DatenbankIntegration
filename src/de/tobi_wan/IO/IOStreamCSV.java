@@ -1,4 +1,4 @@
-package tobi_wan.IO;
+package de.tobi_wan.IO;
 
 import java.io.IOException;
 import java.util.ArrayList;

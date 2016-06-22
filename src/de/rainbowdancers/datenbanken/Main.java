@@ -5,9 +5,9 @@ import java.sql.SQLException;
 import de.rainbowdancers.exceptions.DifferentAmountOfColumnsException;
 import de.rainbowdancers.exceptions.NoValidNumberForPrimaryKeyException;
 import de.rainbowdancers.exceptions.NotEnoughColumnsException;
-import tobi_wan.IO.IOStreamTableCSV;
-import tobi_wan.dataStructure.DatabaseTable;
-import tobi_wan.support.StandardOutput;
+import de.tobi_wan.IO.IOStreamTableCSV;
+import de.tobi_wan.dataStructure.DatabaseTable;
+import de.tobi_wan.support.StandardOutput;
 
 
 

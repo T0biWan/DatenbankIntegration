@@ -32,7 +32,7 @@
       void printlnArray(Object[])
       void printlnDoubleStepArray(Object[][])
  ----------------------------------------------------------------------*/
-package tobi_wan.support;
+package de.tobi_wan.support;
 
 import java.util.Arrays;
 

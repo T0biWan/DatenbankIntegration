@@ -1,4 +1,4 @@
-package tobi_wan.dataStructure;
+package de.tobi_wan.dataStructure;
 
 import java.util.HashMap;
 import de.rainbowdancers.exceptions.DifferentAmountOfColumnsException;

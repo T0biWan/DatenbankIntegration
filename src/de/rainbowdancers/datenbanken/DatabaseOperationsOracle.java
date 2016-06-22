@@ -6,8 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import tobi_wan.dataStructure.DatabaseTable;
-import tobi_wan.support.StandardOutput;
+import de.tobi_wan.dataStructure.DatabaseTable;
+import de.tobi_wan.support.StandardOutput;
 
 
 
