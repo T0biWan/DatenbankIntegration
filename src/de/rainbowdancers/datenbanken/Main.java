@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import de.rainbowdancers.exceptions.DifferentAmountOfColumnsException;
 import de.rainbowdancers.exceptions.NoValidNumberForPrimaryKeyException;
-import de.rainbowdancers.exceptions.NotEnoughColumnsException;
 import de.tobi_wan.IO.IOStreamTableCSV;
 import de.tobi_wan.dataStructure.DatabaseTable;
 import de.tobi_wan.support.StandardOutput;
@@ -74,7 +73,7 @@ public class Main {
          s.println("Succesful");
       } catch (IOException e) {
          e.printStackTrace();
-      } catch (NotEnoughColumnsException e) {
+      } catch (DifferentAmountOfColumnsException e) {
          e.printStackTrace();
       }
       try {
